@@ -1,0 +1,17 @@
+{
+    "name": "ghzferna/bd_php",
+    "description": "Projeto baseado no curso PHP e PDO da Alura",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Ghzferna\\BdPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "GuilhermeHernandez",
+            "email": "familiahernandez0123@gmail.com"
+        }
+    ],
+    "require": {}
+}
