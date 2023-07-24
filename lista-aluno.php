@@ -3,11 +3,11 @@
 // CRIANDO CONEXÃO AO BANCO , JA TEMOS 1 ALUNO INSERIDO
 
 use Ghzferna\BdPhp\Domain\Model\Student;
+use Ghzferna\BdPhp\Infrastructure\Persistence\ConnectionCreator;
 
 require_once 'vendor/autoload.php';
 
-$dbPath = __DIR__ . 'banco.sqlite';
-$pdo = new PDO('sqlite:' . $dbPath);
+$pdo = ConnectionCreator::createConnection();
 
 // CRIANDO UMA CONSULTA 
 $statement = $pdo ->query('SELECT * FROM students;');
@@ -17,6 +17,10 @@ $statement = $pdo ->query('SELECT * FROM students;');
 // RETORNA APENAS UM OBJETO DA CONSULTA (FETCH)
 
 $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+var_dump($studentDataList);
+exit();
+
 $studentList = [];
 
 foreach ($studentDataList as $student) {

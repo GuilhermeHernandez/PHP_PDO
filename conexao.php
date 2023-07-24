@@ -1,6 +1,8 @@
 <?php 
 
 require_once 'vendor/autoload.php';
+
+use Ghzferna\BdPhp\Infrastructure\Persistence\ConnectionCreator;
 // ----------------> PARTE 1 : CONEXÃO 
 //FAZENDO CONEXÃO COM BD
 //1 - STRING DE CONEXÃO - > QUAL DRIVE VAMOS ULTILIZAR : DETALHES ESPECIFICOS DO BD
@@ -9,8 +11,7 @@ require_once 'vendor/autoload.php';
 //3 - SENHA 
 
 // REGRA TER UM LOCAL RAIZ 
-$caminhoBD = __DIR__ . 'banco.sqlite';
-$pdo = new PDO('sqlite:' . $caminhoBD);
+$pdo = ConnectionCreator::createConnection();
 
 echo "Conectado !";
 

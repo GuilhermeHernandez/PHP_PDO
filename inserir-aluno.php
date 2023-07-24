@@ -1,13 +1,13 @@
 <?php
 
 use Ghzferna\BdPhp\Domain\Model\Student;
+use Ghzferna\BdPhp\Infrastructure\Persistence\ConnectionCreator;
 
 require_once 'vendor/autoload.php';
 
-$dbPath = __DIR__ . 'banco.sqlite';
-$pdo = new PDO('sqlite:' . $dbPath);
+$pdo = ConnectionCreator::createConnection();
 
-$student = new Student(null,"Teste da silva",new \DateTimeImmutable('2003-04-18'));
+$student = new Student(null,"Guilherme",new \DateTimeImmutable('2003-04-18'));
 
 // ? ? é para receber parametro de variaveis 
 $sqlInsert = "INSERT INTO students (name,birth_date) VALUES (:name , :birth_date);";
@@ -23,6 +23,9 @@ $statement ->bindValue(':birth_date',$student->birth_date()->format('Y-m-d'));
 
 if ($statement ->execute()){
     echo "Aluno incluido !" .PHP_EOL;
+}
+else {
+    echo "Erro de inserção !" . PHP_EOL;
 }
 
 /*
