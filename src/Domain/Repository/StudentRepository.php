@@ -1,20 +1,13 @@
 <?php
 
-/*
-DEFINIÇÃO DE ALGUM REPOSITORIO DE USUARIO
+namespace Ghzferna\Pdo\Domain\Repository;
 
-*/
-
-namespace Ghzferna\BdPhp\Domain\Repository\StudentRepository;
-use Ghzferna\BdPhp\Domain\Model\Student;
+use Ghzferna\Pdo\Domain\Model\Student;
 
 interface StudentRepository
 {
-    public function allStudents() : array ;
-
-    public function studentsBirthAt(\DateTimeImmutable $birthData) : array ;
-
-    public function saveStudent(Student $student) : bool ;
-
-    public function removeStudent(Student $student) : bool ;
+    public function allStudents(): array;
+    public function studentsBirthAt(\DateTimeInterface $birthDate): array;
+    public function save(Student $student): bool;
+    public function remove(Student $student): bool;
 }

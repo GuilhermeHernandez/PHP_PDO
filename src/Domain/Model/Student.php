@@ -1,56 +1,53 @@
 <?php
 
-// 1 - PRIMEIRO SELECIONAR O NAMESPACE
-namespace Ghzferna\BdPhp\Domain\Model;
+namespace Ghzferna\Pdo\Domain\Model;
 
-// É UMA ENTIDADE UNICA NO BANCO DE DADOS 
 class Student
 {
-    // ATRIBUTOS DA CLASSE QUE É OS MESMAS COLUNAS DA TABELA 
     private ?int $id;
     private string $name;
-    private \DateTimeInterface $birth_date;
+    private \DateTimeInterface $birthDate;
 
-    public function __construct(?int $id,string $name,\DateTimeInterface $birth_date)
+    public function __construct(?int $id, string $name, \DateTimeInterface $birthDate)
     {
-        $this -> id = $id;
-        $this -> name = $name;
-        $this -> birth_date = $birth_date;
+        $this->id = $id;
+        $this->name = $name;
+        $this->birthDate = $birthDate;
     }
 
-    public function defineId(int $id) : void
+    public function defineId(int $id): void
     {
-        if (!is_null($this ->id)){
-            throw new \DomainException("Você só pode definir o ID uma vez");
+        if (!is_null($this->id)) {
+            throw new \DomainException('Você só pode definir o ID uma vez');
         }
 
-        $this -> id = $id;
+        $this->id = $id;
     }
 
-    public function id() : ?int
+    public function id(): ?int
     {
-        return $this -> id;
+        return $this->id;
     }
 
-    public function name() : string
+    public function name(): string
     {
-        return $this -> name;
+        return $this->name;
     }
 
-    public function changeName(string $newName) : void 
+    public function changeName(string $newName): void
     {
-        $this -> name = $newName;
+        $this->name = $newName;
     }
 
-    public function birth_date() : \DateTimeInterface
+    public function birthDate(): \DateTimeInterface
     {
-        return $this -> birth_date;
+        return $this->birthDate;
     }
 
-    public function age() : int
+    public function age(): int
     {
-        return $this ->birth_date->
-        diff(new \DateTimeImmutable())
-        ->y;
+        return $this->birthDate
+            ->diff(new \DateTimeImmutable())
+            ->y;
     }
 }

@@ -1,19 +1,15 @@
-<?php 
+<?php
 
-namespace Ghzferna\BdPhp\Infrastructure\Persistence;
+namespace Ghzferna\Pdo\Infrastructure\Persistence;
 
 use PDO;
 
-// METODO DE CRIAÇÃO ESTATICA - Static Creation Method
-// RETORNAR UM UNICO OBJETO SEM A CRIAÇÃO DELE 
-
 class ConnectionCreator
 {
-    public static function createConnection() : PDO
+    public static function createConnection(): PDO
     {
-        $dbPath = __DIR__ . '/../../../banco.sqlite';
-        $pdo = new PDO('sqlite' . $dbPath);
+        $databasePath = __DIR__ . '/../../../banco.sqlite';
 
-        return $pdo;
+        return new PDO('sqlite:' . $databasePath);
     }
 }

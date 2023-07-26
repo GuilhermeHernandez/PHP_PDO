@@ -1,10 +1,9 @@
 {
-    "name": "ghzferna/bd_php",
-    "description": "Projeto baseado no curso PHP e PDO da Alura",
+    "name": "ghzferna/pdo",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Ghzferna\\BdPhp\\": "src/"
+            "Ghzferna\\Pdo\\": "src/"
         }
     },
     "authors": [

@@ -1,37 +1,23 @@
 <?php
 
-use Ghzferna\BdPhp\Domain\Model\Student;
-use Ghzferna\BdPhp\Infrastructure\Persistence\ConnectionCreator;
+use Ghzferna\Pdo\Domain\Model\Student;
 
 require_once 'vendor/autoload.php';
 
-$pdo = ConnectionCreator::createConnection();
+$pdo = \Ghzferna\Pdo\Infrastructure\Persistence\ConnectionCreator::createConnection();
 
-$student = new Student(null,"Guilherme",new \DateTimeImmutable('2003-04-18'));
+$student = new Student(
+    null,
+    "Patricia Freitas",
+    new \DateTimeImmutable('1986-10-25')
+);
+$name = $student->name();
 
-// ? ? é para receber parametro de variaveis 
-$sqlInsert = "INSERT INTO students (name,birth_date) VALUES (:name , :birth_date);";
+$sqlInsert = "INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);";
+$statement = $pdo->prepare($sqlInsert);
+$statement->bindParam(':name', $student->name());
+$statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
 
-//PREPARANDO UMA INSTRUÇÃO     
-$statement = $pdo -> prepare($sqlInsert);
-
-// NO PRIMEIRO PARAMETRO RETORNA UMA STRING
-$statement ->bindValue(':name',$student->name());
-
-// NO SEGUNDO RETORNA UMA DATA
-$statement ->bindValue(':birth_date',$student->birth_date()->format('Y-m-d'));
-
-if ($statement ->execute()){
-    echo "Aluno incluido !" .PHP_EOL;
+if ($statement->execute()) {
+    echo "Aluno incluído";
 }
-else {
-    echo "Erro de inserção !" . PHP_EOL;
-}
-
-/*
-
-EVITANDO ERRO DE SQL INJECT 
-
-    - ADIONANDO PARAMENTRO 
-
-*/
