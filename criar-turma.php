@@ -13,18 +13,27 @@ $studentRepository = new PdoStudentRepository($connection);
 
 $connection->beginTransaction();
 
-$aStudent = new Student(
-    null,
-    'Guilherme Hernandez Batista',
-    new DateTimeImmutable('1985-05-01'),
-);
-$studentRepository->save($aStudent);
+try {
+    $aStudent = new Student(
+        null,
+        'Guilherme Hernandez Batista',
+        new DateTimeImmutable('1985-05-01'),
+    );
 
-$anotherStudent = new Student(
-    null,
-    'Leonardo Ferreira',
-    new DateTimeImmutable('1985-05-01'),
-);
-$studentRepository->save($anotherStudent);
+    $studentRepository->save($aStudent);
 
-$connection->commit();
+    $anotherStudent = new Student(
+        null,
+        'Leonardo Ferreira',
+        new DateTimeImmutable('1985-05-01'),
+    );
+
+    $studentRepository->save($anotherStudent);
+
+    $connection->commit();
+
+    echo "Turma criada com sucesso !" . PHP_EOL;
+} catch (\RuntimeException $e){
+    echo $e->getMessage();
+    $connection->rollBack();
+}

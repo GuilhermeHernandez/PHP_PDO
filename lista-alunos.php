@@ -1,10 +1,11 @@
 <?php
 
 use Ghzferna\Pdo\Domain\Model\Student;
+use Ghzferna\Pdo\Infrastructure\Persistence\ConnectionCreator;
 
 require_once 'vendor/autoload.php';
 
-$pdo = \Ghzferna\Pdo\Infrastructure\Persistence\ConnectionCreator::createConnection();
+$pdo = ConnectionCreator::createConnection();
 
 $statement = $pdo->query('SELECT * FROM students;');
 $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
