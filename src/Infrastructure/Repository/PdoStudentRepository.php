@@ -2,9 +2,12 @@
 
 namespace Ghzferna\Pdo\Infrastructure\Repository;
 
+use Ghzferna\Pdo\Domain\Model\Phone;
 use Ghzferna\Pdo\Domain\Model\Student;
 use Ghzferna\Pdo\Domain\Repository\StudentRepository;
 use PDO;
+use RuntimeException;
+
 
 class PdoStudentRepository implements StudentRepository
 {
@@ -35,19 +38,47 @@ class PdoStudentRepository implements StudentRepository
 
     private function hydrateStudentList(\PDOStatement $stmt): array
     {
-        $studentDataList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $studentDataList = $stmt->fetchAll();
         $studentList = [];
 
         foreach ($studentDataList as $studentData) {
-            $studentList[] = new Student(
+            $student = new Student(
                 $studentData['id'],
                 $studentData['name'],
                 new \DateTimeImmutable($studentData['birth_date'])
             );
+
+            #$this -> fillPhonesOf($student);
+
+            $studentList[] = $student;
+
         }
 
         return $studentList;
     }
+    /*
+    private function fillPhonesOf(Student $student) : void
+    {
+        $sqlQuery = 'SELECT id,area_code,number FROM phone WHERE student_id = ?';
+
+        $statements = $this ->connection -> prepare($sqlQuery);
+        $statements -> bindValue(1,$student->id(),PDO::PARAM_INT);
+        $statements -> execute();
+
+        $phoneDataList = $statements-> fetchAll();
+
+        foreach ($phoneDataList as $phoneData) {
+            $phone = new Phone(
+                $phoneData['id'],
+                $phoneData['area_code'],
+                $phoneData['number'],
+            );
+
+            
+        }
+
+    }
+    */
 
     public function save(Student $student): bool
     {
@@ -62,6 +93,10 @@ class PdoStudentRepository implements StudentRepository
     {
         $insertQuery = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);';
         $stmt = $this->connection->prepare($insertQuery);
+
+        if ($stmt === false) {
+            throw new RuntimeException($this -> connection -> errorInfo()[2]);
+        }
 
         $success = $stmt->execute([
             ':name' => $student->name(),
@@ -92,5 +127,36 @@ class PdoStudentRepository implements StudentRepository
         $stmt->bindValue(1, $student->id(), PDO::PARAM_INT);
 
         return $stmt->execute();
+    }
+
+    public function studentsWithPhones(): array
+    {
+        $sqlQuery = 'SELECT students.id ,
+                            students.name , 
+                            students.birth_date ,
+                            phone.id AS phone_id,
+                            phone.area_code,
+                            phone.number
+                    FROM students 
+                    
+                    JOIN phone ON students.id = phone.student_id;';
+        
+        $statement = $this ->connection -> query($sqlQuery);
+        $result = $statement -> fetchAll(); 
+        $studentList = [];
+
+        foreach ($result as $row){
+            if(!array_key_exists($row['id'],$studentList)) {
+                $studentList[$row['id']] = new Student(
+                    $row['id'],
+                    $row['name'],
+                    new \DateTimeImmutable($row['birth_date'])
+                );
+            }
+            $phone = new Phone($row['phone_id'],$row['area_code'],$row['number']);
+            $studentList[$row['id']]->addPhone($phone);
+        }
+
+        return $studentList;
     }
 }

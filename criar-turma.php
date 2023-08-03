@@ -17,7 +17,7 @@ try {
     $aStudent = new Student(
         null,
         'Guilherme Hernandez Batista',
-        new DateTimeImmutable('1985-05-01'),
+        new DateTimeImmutable('2001-05-01'),
     );
 
     $studentRepository->save($aStudent);
@@ -33,7 +33,7 @@ try {
     $connection->commit();
 
     echo "Turma criada com sucesso !" . PHP_EOL;
-} catch (\RuntimeException $e){
+} catch (\PDOException $e){
     echo $e->getMessage();
     $connection->rollBack();
 }
